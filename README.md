@@ -1,22 +1,62 @@
-# NovaPlates 0.3.0
+# NovaPlates
 
-Compact nameplates for World of Warcraft WotLK 3.3.5a (Interface 30300), developed for Warmane.
+### Compact plates. Visible cooldowns. Clear threat.
 
-## Download and install
+Modern nameplates for **WoW WotLK 3.3.5a / Warmane**, combining enemy PvP cooldown tracking with readable PvE tank threat colors.
 
-Download **NovaPlates-0.3.0-WotLK.zip** from [Releases](https://github.com/sobata1995-source/NovaPlates/releases/latest). Extract the NovaPlates folder into `Interface/AddOns`, replace the entire older addon folder, and run `/reload`. Enable enemy nameplates with **V**.
+[![Download](https://img.shields.io/badge/Download-v0.3.0-20BFA9?style=for-the-badge)](https://github.com/sobata1995-source/NovaPlates/releases/latest)
+[![Support / Donate via Revolut](https://img.shields.io/badge/Support%20%2F%20Donate-Revolut-0075EB?style=for-the-badge)](https://revolut.me/denisar2z)
 
-## Features
+## PvP cooldowns above the enemy
 
-- PvP cooldown estimates in FIFO cast order: oldest on the left, newest on the right.
-- Five visible icons with a +N queue; hidden timers keep counting down.
-- 382 ability groups / 1028 spell IDs including ranks, class abilities, racials and pets with a known owner.
-- Compact plates, player class colors and automatic cooldown tracking on login/reload.
-- PvE threat colors: red for your aggro, yellow for high threat, green for the selected tank.
-- Hostile and neutral NPCs remain distinguishable; NPC/boss cooldowns are excluded.
+See what your opponent just used without losing sight of their nameplate. The catalog includes **382 ability groups / 1,028 spell IDs**, covering ranks, class abilities, racials and pet abilities with a known owner.
 
-Use `/np tank` with your tank targeted, `/np compact`, `/np test`, or `/np status` for diagnostics. [Bulgarian guide](NovaPlates/README_BG.md) · [Spell catalog and sources](NovaPlates/SPELL_CATALOG.md).
+**FIFO: first in, first out.** The oldest observed cast is on the left; new casts join on the right. Five icons remain visible, with **+N** for queued entries. Hidden timers keep running. Expired entries disappear wherever they are, and remaining icons retain their order.
 
-Cooldowns start after observed casts and use base estimates. Talents, glyphs and server changes can affect timing. Not every consumable or on-use item is covered. Legacy nameplate identification depends on visible native frames and observed units; other nameplate addons can conflict.
+- Color-coded borders for interrupts, defensives, burst, crowd control, mobility and trinkets.
+- Includes Death Grip, Divine Shield, Avenging Wrath and many more.
+- Class-colored player plates when the class is known.
+- Automatic tracking at login/reload and compact plate sizes.
 
-Lua 5.1 and mocked WoW API regression checks passed during development. The user confirmed version 0.3.0 working on their client; this is not exhaustive class/server testing.
+## PvE threat at a glance
+
+| Color | Meaning |
+|---|---|
+| 🔴 Red | You have aggro |
+| 🟡 Yellow | High threat / close to pulling aggro |
+| 🟢 Green | The identified enemy targets your selected tank |
+
+Hostile and neutral NPCs stay distinguishable. PvE retains cast bars and threat tracking; NPC/boss cooldowns are excluded. Target your tank and run `/np tank`, or use `/np tank auto` for raid Main Tank assignments.
+
+## Installation
+
+1. Download **NovaPlates-0.3.0-WotLK.zip** from [Releases](https://github.com/sobata1995-source/NovaPlates/releases/latest).
+2. Extract the **NovaPlates** folder into `World of Warcraft/Interface/AddOns/`.
+3. Replace the entire older addon folder, including `SpellData.lua`, and run `/reload`.
+4. Press **V** to enable enemy nameplates. Disable other addons that replace the same plates.
+
+Use the attached addon ZIP; GitHub's automatic source archives contain an extra repository folder.
+
+## Commands
+
+| Command | Action |
+|---|---|
+| `/np compact` | Restore compact plate sizes |
+| `/np tank` | Set the current target as your tank |
+| `/np test` | Toggle the demonstration panel |
+| `/np status` | Show diagnostics |
+| `/np scale 0.9` | Adjust plate scale |
+
+[Българско ръководство](NovaPlates/README_BG.md) · [Full spell catalog and sources](NovaPlates/SPELL_CATALOG.md)
+
+## Compatibility and timing
+
+Made for the original **3.3.5a client (Interface 30300)**. Icons start after observed casts and show **base cooldown estimates**. Talents, glyphs and server changes can affect timing. Not every consumable or on-use item is included. Pet timers need an identified owner. Legacy nameplate matching depends on visible native frames and observed units.
+
+Lua 5.1 and simulated WoW API checks passed during development. The user confirmed version 0.3.0 working on their Warmane client; this is not exhaustive testing of every ability or server.
+
+## Support development
+
+[![Support / Donate via Revolut](https://img.shields.io/badge/Support%20%2F%20Donate-Revolut-0075EB?style=for-the-badge)](https://revolut.me/denisar2z)
+
+Enjoy NovaPlates? You can leave an optional tip via Revolut: **[@denisar2z](https://revolut.me/denisar2z)**. The addon remains free; donations are entirely voluntary. Thank you for your support!
