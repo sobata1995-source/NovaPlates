@@ -1,0 +1,9 @@
+## Interface: 30300
+## Title: NovaPlates
+## Notes: PvP cooldowns and class colors, PvE tank threat. WotLK 3.3.5a.
+## Author: Custom
+## Version: 0.3.0
+## SavedVariables: NovaPlatesDB
+Logic.lua
+SpellData.lua
+NovaPlates.lua
