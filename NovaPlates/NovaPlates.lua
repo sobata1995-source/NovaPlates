@@ -4,6 +4,7 @@ local FONT = STANDARD_TEXT_FONT or "Fonts\\FRIZQT__.TTF"
 local plates, cooldowns, tanks, units = {}, {}, {}, {}
 local actors, spellNames = {}, {}
 local petOwners = {}
+local attackablePlayers = {}
 local stats = { observed = 0, tracked = 0, last = "none", raw = 0, paladin = "none" }
 local db, preview, interruptName, interruptTexture
 local controller = CreateFrame("Frame")
@@ -144,6 +145,7 @@ local function RebuildUnits()
                     local _, class = UnitClass(u)
                     actor.name, actor.seen, actor.hostile, actor.class = name, GetTime(), true, class
                     actors[guid] = actor
+                    attackablePlayers[guid] = true
                 end
             end
         end
@@ -332,7 +334,11 @@ local function UpdatePlate(p, now, elapsed)
     else f.marker:Hide() end
     -- Record player spells independently from reaction flags: same-faction
     -- duel casts can carry friendly flags. Gate display on the actual plate.
-    local showCooldowns = reaction == "hostile" or (u and UnitCanAttack("player", u))
+    -- Same-faction duel plates can retain friendly colors after losing target.
+    -- Preserve verified attackability by GUID until the duel ends, never by name.
+    if isPlayer and guid and u and UnitCanAttack("player", u) then attackablePlayers[guid] = true end
+    local showCooldowns = reaction == "hostile" or (u and UnitCanAttack("player", u)) or
+        (guid and attackablePlayers[guid])
     UpdateCast(p, u, now); UpdateIcons(f, isPlayer and showCooldowns and guid or nil, now, selected)
     -- Preserve native signals and values; only hide their artwork.
     p.health:SetAlpha(0)
@@ -539,10 +545,13 @@ SlashCmdList.NOVAPLATES = function(msg)
                 for _, icon in ipairs(p.visual.icons) do if icon:IsShown() then icons = icons + 1 end end
             end
         end
-        Say("0.3.0 FIFO enemy=" .. (db.enemy and "ON" or "OFF") .. " active=" .. active .. " plates=" .. visible .. " identified=" .. bound .. " icons=" .. icons)
+        Say("0.3.1 FIFO enemy=" .. (db.enemy and "ON" or "OFF") .. " active=" .. active .. " plates=" .. visible .. " identified=" .. bound .. " icons=" .. icons)
         Say("Log events=" .. stats.raw .. " casts=" .. stats.observed .. " timers=" .. stats.tracked .. " last=" .. stats.last)
         Say("Discovered=" .. discovered .. " worldChildren=" .. select("#", WorldFrame:GetChildren()) .. " error=" .. (stats.error or "none"))
         Say("Paladin: " .. stats.paladin)
+        local targetGUID = UnitGUID("target")
+        Say("Target player=" .. tostring(UnitIsPlayer("target")) .. " attack=" .. tostring(UnitCanAttack("player", "target")) ..
+            " reaction=" .. tostring(UnitReaction("target", "player")) .. " cachedAttack=" .. tostring(targetGUID and attackablePlayers[targetGUID]))
         if discovered == 0 then
             local printed = 0
             for _, frame in ipairs({WorldFrame:GetChildren()}) do
@@ -568,7 +577,7 @@ SlashCmdList.NOVAPLATES = function(msg)
         for _, p in pairs(plates) do Layout(p.visual) end
         Say(cmd .. ": " .. db[cmd])
     elseif cmd == "reset" then
-        NovaPlatesDB = {}; InitializeDB(); FindInterrupt(); wipe(actors); wipe(petOwners); RebuildUnits(); wipe(cooldowns)
+        NovaPlatesDB = {}; InitializeDB(); FindInterrupt(); wipe(actors); wipe(petOwners); wipe(attackablePlayers); RebuildUnits(); wipe(cooldowns)
         for _, p in pairs(plates) do Layout(p.visual) end
         Say("Settings reset.")
     else
@@ -583,24 +592,28 @@ controller:SetScript("OnEvent", function(self, event, ...)
     elseif event == "PLAYER_LOGIN" then
         if not db then InitializeDB() end
         FindInterrupt(); BuildSpellNames(); RebuildUnits()
-        Say("0.3.0 loaded: " .. N.catalogCount .. " cooldown groups, FIFO. PvE threat ON. /np test")
+        Say("0.3.1 loaded: " .. N.catalogCount .. " cooldown groups, FIFO. PvE threat ON. /np test")
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         if db then CombatLog(...) end
     elseif event == "SPELLS_CHANGED" then
         if db then FindInterrupt() end
     elseif event == "PLAYER_ENTERING_WORLD" then
-        wipe(cooldowns); wipe(actors); wipe(petOwners)
+        wipe(cooldowns); wipe(actors); wipe(petOwners); wipe(attackablePlayers)
+        if db then RebuildUnits() end
+    elseif event == "DUEL_FINISHED" then
+        wipe(attackablePlayers)
+    elseif event == "UNIT_FACTION" or event == "PLAYER_TARGET_CHANGED" or event == "UPDATE_MOUSEOVER_UNIT" then
         if db then RebuildUnits() end
     end
 end)
-for _, event in ipairs({"ADDON_LOADED", "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD", "SPELLS_CHANGED", "COMBAT_LOG_EVENT_UNFILTERED"}) do controller:RegisterEvent(event) end
+for _, event in ipairs({"ADDON_LOADED", "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD", "SPELLS_CHANGED", "COMBAT_LOG_EVENT_UNFILTERED", "DUEL_FINISHED", "UNIT_FACTION", "PLAYER_TARGET_CHANGED", "UPDATE_MOUSEOVER_UNIT"}) do controller:RegisterEvent(event) end
 local scan, tick = 0, 0
 local function UpdateAll(self, elapsed)
     if not db then return end
     scan, tick = scan + elapsed, tick + elapsed
     local now = GetTime()
     if scan >= .2 then
-        for guid, actor in pairs(actors) do if now - actor.seen >= 600 then actors[guid] = nil end end
+        for guid, actor in pairs(actors) do if now - actor.seen >= 600 then actors[guid] = nil; attackablePlayers[guid] = nil end end
         for pet, owner in pairs(petOwners) do if not actors[owner] then petOwners[pet] = nil end end
         Discover(); RebuildUnits(); N.Prune(cooldowns, now); scan = 0
     end
