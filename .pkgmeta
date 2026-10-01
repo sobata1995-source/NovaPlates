@@ -1,0 +1,7 @@
+package-as: NovaPlates-Package
+enable-nolib-creation: no
+ignore:
+  - README.md
+  - AUTOMATIC-RELEASES.md
+move-folders:
+  NovaPlates-Package/NovaPlates: NovaPlates
