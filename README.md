@@ -5,6 +5,7 @@
 Modern nameplates for **WoW WotLK 3.3.5a / Warmane**, combining enemy PvP cooldown tracking with readable PvE tank threat colors.
 
 [![Download](https://img.shields.io/badge/Download-v0.3.1-20BFA9?style=for-the-badge)](https://github.com/sobata1995-source/NovaPlates/releases/latest)
+[![Support on Patreon](https://img.shields.io/badge/Support-Patreon-FF424D?style=for-the-badge)](https://www.patreon.com/c/DenisAleksandrov/membership)
 [![Support / Donate via Revolut](https://img.shields.io/badge/Support%20%2F%20Donate-Revolut-0075EB?style=for-the-badge)](https://revolut.me/denisar2z)
 
 ## New in 0.3.1
@@ -80,4 +81,8 @@ Lua 5.1 and simulated WoW API checks passed during development. The supplied in-
 
 [![Support / Donate via Revolut](https://img.shields.io/badge/Support%20%2F%20Donate-Revolut-0075EB?style=for-the-badge)](https://revolut.me/denisar2z)
 
-Enjoy NovaPlates? You can leave an optional tip via Revolut: **[@denisar2z](https://revolut.me/denisar2z)**. The addon remains free; donations are entirely voluntary. Thank you for your support!
+Support ongoing development on [Patreon](https://www.patreon.com/c/DenisAleksandrov/membership), join the [Razer Dev Studio Discord](https://discord.gg/Pr5eMAUqt), or browse [my CurseForge addons](https://www.curseforge.com/members/sobstven/projects).
+
+The addon is free to download and use. Patreon support is optional and helps fund development and updates. Custom development is quoted separately; membership does not include individual tasks or guarantee implementation of suggestions. Feedback and testing are welcome too.
+
+You can also [leave a one-time tip via Revolut](https://revolut.me/denisar2z).
