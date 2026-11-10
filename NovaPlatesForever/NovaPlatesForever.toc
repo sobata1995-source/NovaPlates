@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: NovaPlates Forever
+## Notes: Compact nameplates, NPC reaction and PvE threat colors. Cooldowns not enabled.
+## Author: NovaPlates
+## Version: 0.1.0-alpha
+## SavedVariables: NovaPlatesForeverDB
+Core.lua

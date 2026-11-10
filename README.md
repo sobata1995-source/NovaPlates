@@ -8,6 +8,11 @@ Modern nameplates for **WoW WotLK 3.3.5a / Warmane**, combining enemy PvP cooldo
 [![Support on Patreon](https://img.shields.io/badge/Support-Patreon-FF424D?style=for-the-badge)](https://www.patreon.com/c/DenisAleksandrov/membership)
 [![Support / Donate via Revolut](https://img.shields.io/badge/Support%20%2F%20Donate-Revolut-0075EB?style=for-the-badge)](https://revolut.me/denisar2z)
 
+## Choose your client
+
+- **Forever 1.60.1:** [NovaPlates Forever 0.1.0-alpha](https://github.com/sobata1995-source/NovaPlates/releases/tag/forever-v0.1.0-alpha) — compact native nameplates and NPC/threat colors. **Cooldowns are disabled.** [Forever documentation](NovaPlatesForever/README.md).
+- **WotLK 3.3.5a / Warmane:** [NovaPlates 0.3.1](https://github.com/sobata1995-source/NovaPlates/releases/tag/v0.3.1) — the cooldown features and screenshots below refer to this edition.
+
 ## New in 0.3.1
 
 Same-faction duel opponents retain their cooldown icons after target changes once attackability has been observed. The cached eligibility clears when the duel finishes. The regression fails on 0.3.0 and passes on 0.3.1.
